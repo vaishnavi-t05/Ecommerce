@@ -1,7 +1,7 @@
 import { useState } from "react";
-import Navbar from "./components/Navbar";
-import ProductCard from "./components/ProductCard";
-import Cart from "./components/Cart";
+import Navbar from "./Components/Navbar";
+import ProductCard from "./Components/ProductCard";
+import Cart from "./Components/Cart";
 import products from "./data/Products";
 import "./App.css";
 
