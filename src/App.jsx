@@ -1,7 +1,7 @@
 import React, { useState, useMemo, useRef } from "react";
 import "./App.css";
 
-import { PRODUCTS, CATEGORIES } from "./data/products";
+import { PRODUCTS, CATEGORIES } from "./data/Products";
 import Navbar from "./Components/CategoryFilter";
 import Hero from "./components/Hero";
 import CategoryFilter from "./components/CategoryFilter";
