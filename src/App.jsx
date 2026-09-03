@@ -1,168 +1,134 @@
-import { useState } from "react";
-import Navbar from "./Components/Navbar";
-import ProductCard from "./Components/ProductCard";
-import Cart from "./Components/Cart";
-import products from "./data/Products";
+import React, { useState, useMemo, useRef } from "react";
 import "./App.css";
 
-function App() {
+import { PRODUCTS, CATEGORIES } from "./data/products";
+import Navbar from "./Components/CategoryFilter";
+import Hero from "./components/Hero";
+import CategoryFilter from "./components/CategoryFilter";
+import ProductGrid from "./components/ProductGrid";
+import CartDrawer from "./components/CartDrawer";
+import Footer from "./components/Footer";
+import Toast from "./components/Toast";
+
+export default function App() {
+  // ---------- Filtering state ----------
+  const [activeCategory, setActiveCategory] = useState("All");
+  const [searchQuery, setSearchQuery] = useState("");
+
+  // ---------- Wishlist state (Set of product ids) ----------
+  const [wishlist, setWishlist] = useState(new Set());
+
+  // ---------- Cart state: array of { id, qty } ----------
   const [cart, setCart] = useState([]);
-  const [search, setSearch] = useState("");
-  const [category, setCategory] = useState("All");
-  const [sort, setSort] = useState("default");
-  const [maxPrice, setMaxPrice] = useState(60000);
-  const [showCart, setShowCart] = useState(false);
+  const [cartOpen, setCartOpen] = useState(false);
 
-  const addToCart = (product) => {
-    const existingProduct = cart.find(
-      (item) => item.id === product.id
-    );
+  // ---------- Toast (the little "added to bag" popup) ----------
+  const [toast, setToast] = useState("");
+  const toastTimer = useRef(null);
 
-    if (existingProduct) {
-      setCart(
-        cart.map((item) =>
-          item.id === product.id
-            ? { ...item, quantity: item.quantity + 1 }
-            : item
-        )
-      );
-    } else {
-      setCart([...cart, { ...product, quantity: 1 }]);
-    }
+  // Recompute the visible product list whenever category or search changes
+  const filteredProducts = useMemo(() => {
+    return PRODUCTS.filter((product) => {
+      const matchesCategory = activeCategory === "All" || product.category === activeCategory;
+      const matchesSearch = product.name.toLowerCase().includes(searchQuery.toLowerCase());
+      return matchesCategory && matchesSearch;
+    });
+  }, [activeCategory, searchQuery]);
+
+  // ---------- Wishlist handlers ----------
+  const toggleWishlist = (productId) => {
+    setWishlist((prev) => {
+      const next = new Set(prev);
+      if (next.has(productId)) {
+        next.delete(productId);
+      } else {
+        next.add(productId);
+      }
+      return next;
+    });
   };
 
-  const categories = [
-    "All",
-    ...new Set(products.map((product) => product.category)),
-  ];
+  // ---------- Cart handlers ----------
+  const addToCart = (product) => {
+    setCart((prev) => {
+      const existingItem = prev.find((item) => item.id === product.id);
+      if (existingItem) {
+        return prev.map((item) =>
+          item.id === product.id ? { ...item, qty: item.qty + 1 } : item
+        );
+      }
+      return [...prev, { id: product.id, qty: 1 }];
+    });
 
-  let filteredProducts = products.filter((product) => {
-    const matchesSearch = product.name
-      .toLowerCase()
-      .includes(search.toLowerCase());
+    showToast(`${product.name} added to bag`);
+  };
 
-    const matchesCategory =
-      category === "All" || product.category === category;
+  const changeQty = (productId, delta) => {
+    setCart((prev) =>
+      prev
+        .map((item) => (item.id === productId ? { ...item, qty: item.qty + delta } : item))
+        .filter((item) => item.qty > 0) // remove the item once qty hits 0
+    );
+  };
 
-    const matchesPrice = product.price <= maxPrice;
+  const removeFromCart = (productId) => {
+    setCart((prev) => prev.filter((item) => item.id !== productId));
+  };
 
-    return matchesSearch && matchesCategory && matchesPrice;
-  });
+  // ---------- Toast helper ----------
+  const showToast = (message) => {
+    setToast(message);
+    clearTimeout(toastTimer.current);
+    toastTimer.current = setTimeout(() => setToast(""), 1800);
+  };
 
-  if (sort === "low") {
-    filteredProducts.sort((a, b) => a.price - b.price);
-  }
-
-  if (sort === "high") {
-    filteredProducts.sort((a, b) => b.price - a.price);
-  }
-
-  if (sort === "rating") {
-    filteredProducts.sort((a, b) => b.rating - a.rating);
-  }
-
-  const cartCount = cart.reduce(
-    (total, item) => total + item.quantity,
-    0
-  );
+  // ---------- Derived cart values ----------
+  // Attach full product details to each cart line so children don't need PRODUCTS
+  const cartItems = cart.map((item) => ({
+    ...item,
+    product: PRODUCTS.find((p) => p.id === item.id),
+  }));
+  const cartCount = cart.reduce((sum, item) => sum + item.qty, 0);
+  const cartTotal = cartItems.reduce((sum, item) => sum + item.qty * item.product.price, 0);
 
   return (
-    <>
+    <div className="app">
       <Navbar
+        searchQuery={searchQuery}
+        onSearchChange={setSearchQuery}
+        wishlistCount={wishlist.size}
         cartCount={cartCount}
-        setShowCart={setShowCart}
+        onCartClick={() => setCartOpen(true)}
       />
 
-      <section className="hero" id="home">
-        <div>
-          <p>WELCOME TO Easycart</p>
-          <h1>Everything You Need,<br />All in One Place.</h1>
-          <p>
-            Discover amazing products at the best prices.
-          </p>
+      <Hero />
 
-          <a href="#products">
-            <button>Shop Now →</button>
-          </a>
-        </div>
-      </section>
+      <CategoryFilter
+        categories={CATEGORIES}
+        activeCategory={activeCategory}
+        onSelect={setActiveCategory}
+      />
 
-      <section className="products-section" id="products">
-        <div className="section-title">
-          <p>OUR COLLECTION</p>
-          <h2>Explore Products</h2>
-        </div>
+      <ProductGrid
+        products={filteredProducts}
+        gridKey={`${activeCategory}-${searchQuery}`} // remounts grid so animation replays
+        wishlist={wishlist}
+        onToggleWishlist={toggleWishlist}
+        onAddToCart={addToCart}
+      />
 
-        <div className="filters">
-          <input
-            type="text"
-            placeholder="🔍 Search products..."
-            value={search}
-            onChange={(e) => setSearch(e.target.value)}
-          />
+      <Footer />
 
-          <select
-            value={category}
-            onChange={(e) => setCategory(e.target.value)}
-          >
-            {categories.map((cat) => (
-              <option key={cat} value={cat}>
-                {cat}
-              </option>
-            ))}
-          </select>
+      <CartDrawer
+        open={cartOpen}
+        onClose={() => setCartOpen(false)}
+        cartItems={cartItems}
+        cartTotal={cartTotal}
+        onChangeQty={changeQty}
+        onRemove={removeFromCart}
+      />
 
-          <select
-            value={sort}
-            onChange={(e) => setSort(e.target.value)}
-          >
-            <option value="default">Sort By</option>
-            <option value="low">Price: Low to High</option>
-            <option value="high">Price: High to Low</option>
-            <option value="rating">Highest Rated</option>
-          </select>
-
-          <select
-            value={maxPrice}
-            onChange={(e) =>
-              setMaxPrice(Number(e.target.value))
-            }
-          >
-            <option value="60000">All Prices</option>
-            <option value="1500">Under ₹1,500</option>
-            <option value="2500">Under ₹2,500</option>
-            <option value="5000">Under ₹5,000</option>
-            <option value="60000">Under ₹60,000</option>
-          </select>
-        </div>
-
-        <div className="products-grid">
-          {filteredProducts.length > 0 ? (
-            filteredProducts.map((product) => (
-              <ProductCard
-                key={product.id}
-                product={product}
-                addToCart={addToCart}
-              />
-            ))
-          ) : (
-            <div className="no-products">
-              <h2>No products found 😔</h2>
-              <p>Try another search or category.</p>
-            </div>
-          )}
-        </div>
-      </section>
-
-      {showCart && (
-        <Cart
-          cart={cart}
-          setCart={setCart}
-          setShowCart={setShowCart}
-        />
-      )}
-    </>
+      <Toast message={toast} />
+    </div>
   );
 }
-
-export default App;
