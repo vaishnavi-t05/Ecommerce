@@ -1,8 +1,5 @@
 import React from "react";
 import { Heart, ShoppingBag, Search } from "lucide-react";
-
-// The little bow ribbon icon that sits next to the logo.
-// Pulled out into its own function so Navbar.jsx stays readable.
 function BowIcon() {
   return (
     <svg width="30" height="24" viewBox="0 0 30 24" fill="none" className="bow-icon">
@@ -24,9 +21,11 @@ function BowIcon() {
  * - searchQuery / onSearchChange: controls the search input
  * - wishlistCount: number shown on the heart badge
  * - cartCount: number shown on the bag badge
+ * - cartBump: true for a brief moment right after an item is added,
+ *   used to trigger the badge's "pop" animation
  * - onCartClick: opens the cart drawer
  */
-export default function Navbar({ searchQuery, onSearchChange, wishlistCount, cartCount, onCartClick }) {
+export default function Navbar({ searchQuery, onSearchChange, wishlistCount, cartCount, cartBump, onCartClick }) {
   return (
     <nav className="navbar">
       {/* Logo: "Style" in script font + "WidMe" in serif italic, with the bow */}
@@ -58,7 +57,9 @@ export default function Navbar({ searchQuery, onSearchChange, wishlistCount, car
 
         <button className="icon-btn" aria-label="Cart" onClick={onCartClick}>
           <ShoppingBag size={22} />
-          {cartCount > 0 && <span className="badge">{cartCount}</span>}
+          {cartCount > 0 && (
+            <span className={`badge ${cartBump ? "badge-bump" : ""}`}>{cartCount}</span>
+          )}
         </button>
       </div>
     </nav>

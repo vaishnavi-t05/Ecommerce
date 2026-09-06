@@ -1,9 +1,5 @@
 import React from "react";
 
-/**
- * The top banner. "Welcome to My Shop" glows using a CSS animation
- * defined in App.css (see the .hero-title / @keyframes glow-pulse rules).
- */
 export default function Hero() {
   const scrollToShop = () => {
     document.getElementById("shop")?.scrollIntoView({ behavior: "smooth" });

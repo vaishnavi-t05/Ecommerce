@@ -1,14 +1,7 @@
 import React from "react";
 import { Heart } from "lucide-react";
 
-/**
- * Props:
- * - product: { id, name, category, price, img }
- * - index: position in the grid, used to stagger the entrance animation
- * - isLiked: whether this product is in the wishlist
- * - onToggleWishlist: (id) => void
- * - onAddToCart: (product) => void
- */
+
 export default function ProductCard({ product, index, isLiked, onToggleWishlist, onAddToCart }) {
   return (
     // The "--i" custom property feeds the staggered fade-in animation in App.css
@@ -17,7 +10,7 @@ export default function ProductCard({ product, index, isLiked, onToggleWishlist,
         <img className="product-img" src={product.img} alt={product.name} loading="lazy" />
 
         <button
-          className="heart-btn"
+          className={`heart-btn ${isLiked ? "liked" : ""}`}
           onClick={() => onToggleWishlist(product.id)}
           aria-label="Add to wishlist"
         >
