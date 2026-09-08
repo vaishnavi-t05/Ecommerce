@@ -16,15 +16,6 @@ function BowIcon() {
   );
 }
 
-/**
- * Props:
- * - searchQuery / onSearchChange: controls the search input
- * - wishlistCount: number shown on the heart badge
- * - cartCount: number shown on the bag badge
- * - cartBump: true for a brief moment right after an item is added,
- *   used to trigger the badge's "pop" animation
- * - onCartClick: opens the cart drawer
- */
 export default function Navbar({ searchQuery, onSearchChange, wishlistCount, cartCount, cartBump, onCartClick }) {
   return (
     <nav className="navbar">

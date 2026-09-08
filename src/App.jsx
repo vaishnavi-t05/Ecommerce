@@ -10,6 +10,7 @@ import ProductGrid from "./Components/ProductGrid";
 import CartDrawer from "./Components/CartDrawer";
 import Footer from "./Components/Footer";
 import Toast from "./Components/Toast";
+import OfferSection from "./Components/OfferSection";
 
 export default function App() {
   // ---------- Filtering state ----------
@@ -72,7 +73,13 @@ export default function App() {
         );
       }
 
-      return [...prev, { id: product.id, qty: 1 }];
+      return [
+        ...prev,
+        {
+          id: product.id,
+          qty: 1,
+        },
+      ];
     });
 
     showToast(`${product.name} added to bag`);
@@ -84,7 +91,10 @@ export default function App() {
       prev
         .map((item) =>
           item.id === productId
-            ? { ...item, qty: item.qty + delta }
+            ? {
+                ...item,
+                qty: item.qty + delta,
+              }
             : item
         )
         .filter((item) => item.qty > 0)
@@ -112,7 +122,9 @@ export default function App() {
   // ---------- Cart items ----------
   const cartItems = cart.map((item) => ({
     ...item,
-    product: PRODUCTS.find((p) => p.id === item.id),
+    product: PRODUCTS.find(
+      (product) => product.id === item.id
+    ),
   }));
 
   // ---------- Cart count ----------
@@ -131,7 +143,7 @@ export default function App() {
   return (
     <div className="app">
 
-      {/* Navbar */}
+      {/* ================= NAVBAR ================= */}
       <Navbar
         searchQuery={searchQuery}
         onSearchChange={setSearchQuery}
@@ -140,17 +152,24 @@ export default function App() {
         onCartClick={() => setCartOpen(true)}
       />
 
-      {/* Hero section */}
+      {/* ================= HERO ================= */}
       <Hero />
 
-      {/* Category filter */}
+      {/* ================= OFFER SECTION ================= */}
+      <OfferSection
+        wishlist={wishlist}
+        onToggleWishlist={toggleWishlist}
+        onAddToCart={addToCart}
+      />
+
+      {/* ================= CATEGORY FILTER ================= */}
       <CategoryFilter
         categories={CATEGORIES}
         activeCategory={activeCategory}
         onSelect={setActiveCategory}
       />
 
-      {/* Products */}
+      {/* ================= PRODUCTS ================= */}
       <ProductGrid
         products={filteredProducts}
         gridKey={`${activeCategory}-${searchQuery}`}
@@ -159,10 +178,10 @@ export default function App() {
         onAddToCart={addToCart}
       />
 
-      {/* Footer */}
+      {/* ================= FOOTER ================= */}
       <Footer />
 
-      {/* Cart drawer */}
+      {/* ================= CART DRAWER ================= */}
       <CartDrawer
         open={cartOpen}
         onClose={() => setCartOpen(false)}
@@ -172,7 +191,7 @@ export default function App() {
         onRemove={removeFromCart}
       />
 
-      {/* Toast */}
+      {/* ================= TOAST ================= */}
       <Toast message={toast} />
 
     </div>
