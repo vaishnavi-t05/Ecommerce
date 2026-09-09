@@ -2,7 +2,6 @@ import React, { useState, useMemo, useRef } from "react";
 import "./App.css";
 
 import { PRODUCTS, CATEGORIES } from "./data/Products";
-
 import Navbar from "./Components/Navbar";
 import Hero from "./Components/Hero";
 import CategoryFilter from "./Components/CategoryFilter";
