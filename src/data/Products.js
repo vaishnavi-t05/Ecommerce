@@ -28,7 +28,7 @@ export const PRODUCTS = [
     name: "Wild Print Jumpsuit",
     category: "Jumpsuits",
     price: 2599,
-    img: "https://images.pexels.com/photos/4006508/pexels-photo-4006508.jpeg?auto=compress&cs=tinysrgb&w=700",
+    img: "https://3.bp.blogspot.com/-zXh2r8Ita1M/Vz1lQEogP1I/AAAAAAAAAMQ/I370AhLKQpIKER1_rAkJVJnEKWZU7nQAACLcB/s1600/atmos-here-9479-193022-1.jpg",
   },
   {
     id: 5,
