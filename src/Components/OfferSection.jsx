@@ -1,6 +1,6 @@
 import React from "react";
 import { OFFERS } from "../data/offers";
-import { PRODUCTS } from "../data/products";
+import { PRODUCTS } from "../data/Products";
 import OfferRow from "./OfferRow";
 
 export default function OffersSection({ wishlist, onToggleWishlist, onAddToCart }) {
