@@ -1,21 +1,50 @@
-import React from "react";
+// ============================================================
+// Hero.jsx — THE BIG BANNER at the top of the page
+// ============================================================
+// WHAT YOU SEE:
+//   Left:  "GLOW BEYOND THE ORDINARY" + small paragraph + gold button
+//   Right: photo of a woman holding the serum (src/assets/hero.jpg)
+//
+// FONTS: title uses Cormorant Garamond (white), the word
+// ORDINARY uses italic gold. Paragraph is small pearl text.
+//
+// BUTTON: "Shop Skincare" scrolls down to the products.
+// It finds the element with id="shop" (see CategoryFilter.jsx).
+// No props needed.
+// ============================================================
+
+import heroImg from "../assets/hero.jpg";
 
 export default function Hero() {
+  // Scroll smoothly to the product section
   const scrollToShop = () => {
     document.getElementById("shop")?.scrollIntoView({ behavior: "smooth" });
   };
 
   return (
     <header className="hero">
-      <div className="hero-eyebrow">Baby Pink Edit · New Arrivals</div>
-      <h1 className="hero-title">Welcome to My Shop</h1>
-      <p className="hero-sub">
-        Frocks, jumpsuits, baggys, crop tops &amp; party wear — handpicked pieces
-        in every shade of soft pink you'll love.
-      </p>
-      <button className="hero-cta" onClick={scrollToShop}>
-        Shop the Collection
-      </button>
+      {/* Left: headline + paragraph + button */}
+      <div className="hero-copy">
+        <h1 className="hero-title">
+          GLOW BEYOND THE <em>ORDINARY</em>
+        </h1>
+
+        <p className="hero-tagline">
+          Advanced skincare treatments, dermatologist formulated products, and personalized care for healthier, glowing skin.
+        </p>
+
+        <button className="hero-cta" onClick={scrollToShop}>
+          Shop Skincare
+        </button>
+      </div>
+
+      {/* Right: serum photo */}
+      <div className="hero-figure">
+        <img
+          src={heroImg}
+          alt="Woman in a soft robe holding Radiant Botanics Glow Serum, hand gently on her cheek"
+        />
+      </div>
     </header>
   );
 }

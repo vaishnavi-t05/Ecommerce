@@ -1,4 +1,15 @@
-import React from "react";
+// ============================================================
+// OfferRow.jsx — ONE row: 1 offer card + its products
+// ============================================================
+// WHAT YOU SEE: [OfferCard] [product] [product] [product]
+//
+// PROPS:
+//   offer            = one offer object (style, title...)
+//   products         = full product objects for this row
+//   wishlist         = Set of liked ids
+//   onToggleWishlist / onAddToCart = from App.jsx
+// ============================================================
+
 import OfferCard from "./OfferCard";
 import ProductCard from "./ProductCard";
 
@@ -11,11 +22,10 @@ export default function OfferRow({
 }) {
   return (
     <div className="offer-row">
-
-      {/* Offer Card */}
+      {/* Left: the colored card */}
       <OfferCard offer={offer} />
 
-      {/* Products inside offer */}
+      {/* Right: the row's products (reuses ProductCard) */}
       <div className="offer-products">
         {products.map((product, index) => (
           <ProductCard
@@ -28,7 +38,6 @@ export default function OfferRow({
           />
         ))}
       </div>
-
     </div>
   );
 }
