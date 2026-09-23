@@ -595,8 +595,10 @@
   padding: 28px 28px 22px;
 
   background:
-    radial-gradient(circle at 20% 10%, rgba(212, 184, 150, 0.25), transparent 55%),
-    var(--blush-soft);
+    radial-gradient(circle at 6% 30%, rgba(201, 168, 106, 0.22), transparent 55%),
+    radial-gradient(circle at 94% 25%, rgba(201, 168, 106, 0.22), transparent 55%),
+    radial-gradient(ellipse at 50% 100%, rgba(201, 168, 106, 0.16), transparent 60%),
+    linear-gradient(180deg, #161616 0%, #0A0A0A 100%);
 
   color: var(--text-light);
 
@@ -1041,8 +1043,10 @@
   margin: 0 auto;
 
   background:
-    radial-gradient(circle at 85% 20%, rgba(243, 218, 221, 0.85), transparent 55%),
-    var(--ivory);
+    radial-gradient(circle at 6% 35%, rgba(201, 168, 106, 0.18), transparent 55%),
+    radial-gradient(circle at 94% 30%, rgba(201, 168, 106, 0.18), transparent 55%),
+    radial-gradient(ellipse at 50% 100%, rgba(201, 168, 106, 0.14), transparent 60%),
+    linear-gradient(180deg, #111111 0%, #0A0A0A 100%);
 
   perspective: 900px;
 }
@@ -2340,9 +2344,45 @@
 }
 
 /* =========================================================
-   RESPONSIVE
+   RESPONSIVE — one system for all screens
+   Breakpoints: 1200 laptop / 1024 tablet-wide / 768 tablet /
+   640 large phone / 480 small phone / 380 tiny phone
 ========================================================= */
 
+/* ----- Small laptops (<=1200px): breathe a little ----- */
+@media (max-width: 1200px) {
+  .offers-section,
+  .product-grid {
+    max-width: 100%;
+  }
+
+  .hero-copy {
+    max-width: 560px;
+  }
+}
+
+/* ----- Tablets wide (<=1024px): narrower cards ----- */
+@media (max-width: 1024px) {
+  .hero {
+    gap: 32px;
+    padding: 120px 32px 60px;
+  }
+
+  .offer-card {
+    flex-basis: 240px;
+  }
+
+  .product-grid {
+    grid-template-columns:
+      repeat(auto-fill, minmax(200px, 1fr));
+  }
+
+  .reveal-text {
+    padding: 36px 28px;
+  }
+}
+
+/* ----- Tablets (<=900px): stack offer rows ----- */
 @media (max-width: 900px) {
   .offer-row {
     flex-direction: column;
@@ -2367,6 +2407,7 @@
   }
 }
 
+/* ----- Large phones (<=640px): stack hero, bottom-sheet cart ----- */
 @media (max-width: 640px) {
   .navbar {
     padding: 12px 16px;
@@ -2419,15 +2460,15 @@
   }
 
   .offers-section {
-    padding: 55px 16px 40px;
+    padding: 24px 16px 20px;
 
     border-radius: 28px 28px 0 0;
   }
 
   .offers-heading {
-    font-size: 24px;
+    font-size: 20px;
 
-    margin-bottom: 28px;
+    margin-bottom: 12px;
   }
 
   .offer-row {
@@ -2497,5 +2538,114 @@
     background: var(--rose);
 
     margin: 10px auto 0;
+  }
+}
+
+/* ----- Small phones (<=480px): wrap navbar, 2-col grids ----- */
+@media (max-width: 480px) {
+  .navbar {
+    flex-wrap: wrap;
+
+    padding: 10px 14px;
+
+    gap: 8px;
+  }
+
+  .logo-auraskin {
+    font-size: 22px;
+  }
+
+  .search-box {
+    order: 3;
+
+    flex-basis: 100%;
+
+    max-width: none;
+  }
+
+  .hero {
+    padding: 150px 16px 40px;
+
+    gap: 28px;
+  }
+
+  .hero-figure {
+    max-width: 260px;
+  }
+
+  .product-grid {
+    grid-template-columns:
+      repeat(auto-fill, minmax(150px, 1fr));
+
+    gap: 12px;
+
+    padding: 24px 14px 40px;
+  }
+
+  .offer-products {
+    grid-template-columns:
+      repeat(2, 1fr);
+
+    gap: 10px;
+  }
+
+  .transform-slider {
+    height: 300px;
+  }
+
+  .articles-section {
+    padding: 32px 16px 36px;
+  }
+
+  .reveal-text {
+    padding: 28px 20px;
+  }
+
+  .why-section {
+    padding: 44px 18px 40px;
+  }
+
+  .why-stats {
+    gap: 20px;
+  }
+}
+
+/* ----- Tiny phones (<=380px): tighten everything ----- */
+@media (max-width: 380px) {
+  .navbar {
+    padding: 8px 12px;
+  }
+
+  .logo-auraskin {
+    font-size: 20px;
+  }
+
+  .nav-icons {
+    gap: 10px;
+  }
+
+  .hero {
+    padding: 150px 12px 32px;
+  }
+
+  .product-grid {
+    grid-template-columns:
+      repeat(auto-fill, minmax(130px, 1fr));
+
+    gap: 10px;
+
+    padding: 20px 12px 32px;
+  }
+
+  .offers-section {
+    padding: 20px 12px 16px;
+  }
+
+  .transform-slider {
+    height: 260px;
+  }
+
+  .footer {
+    padding: 36px 16px 0;
   }
 }

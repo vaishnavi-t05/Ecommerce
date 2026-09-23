@@ -63,9 +63,9 @@ export default function Footer() {
         {/* Contact + newsletter */}
         <div className="footer-col">
           <h4 className="footer-head">Stay Glowing</h4>
-          <p className="footer-contact"><Phone size={13} /> +91 98765 43210</p>
+          <p className="footer-contact"><Phone size={13} /> +91 8111038226</p>
           <p className="footer-contact"><Mail size={13} /> care@auraskin.com</p>
-          <p className="footer-contact"><MapPin size={13} /> Chennai, India</p>
+          <p className="footer-contact"><MapPin size={13} /> Coimbatore, India</p>
           <form className="footer-news" onSubmit={(e) => e.preventDefault()}>
             <input type="email" placeholder="Email for offers" aria-label="Email" />
             <button type="submit">Join</button>
